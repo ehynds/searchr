@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>YQL Image Search</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	
+	<!-- templates -->
+	<script id="tmplResults" type="text/x-jquery-tmpl">
+		<a href="${url}" title="${title}">
+			<img src="${thumbnail_url}" alt="${title}" />
+		</a>
+	</script>
+	
+	<script id="tmplNoResults" type="text/x-jquery-tmpl">
+		<p>No results found!</p>
+	</script>
+
+	<script id="tmplNoSources" type="text/x-jquery-tmpl">
+		<p>Please choose at least one source!</p>
+	</script>
+	
+	<script id="tmplEnterKeyword" type="text/x-jquery-tmpl">
+		<p>Enter a keyword!</p>
+	</script>
+	
+	<script id="tmplBreadcrumb" type="text/x-jquery-tmpl">
+		<li><a href="#${term}" title="${term}">${term}</a></li>
+	</script>
+	
+	<script id="tmplSources" type="text/x-jquery-tmpl">
+		<label for="${name}">
+			<input type="checkbox" id="${name}" name="source" checked="checked" /> ${name}
+		</label>
+	</script>
+	
+	<script id="tmplSuggestion" type="text/x-jquery-tmpl">
+		<li>
+			<a href="#${suggestion}" title="${suggestion}">
+				{{html $item.highlight(suggestion) }}
+			</a>
+		</li>
+	</script>
+</head>
+<body>
+
+<div id="container">
+	<h1>Searchr</h1>
+	<p>
+		This is a basic image search engine built in JavaScript inspired by Rebecca Murphey's <a href="https://github.com/rmurphey/srchr">Srchr</a> experiment.  I created this to become more familiar with YQL, 
+		pub/sub &amp; module patterns, hash change events, jQuery's templating plugin, and RequireJS.  I also wanted to write something
+		extensible so that plugging in additional API's would be trivial.  Use a modern browser for the best experience.
+	</p>
+
+	<form action="#" method="post">
+		<label for="keyword">Keyword:</label>
+		<input type="text" name="keyword" id="keyword" placeholder="Begin typing..." autocomplete="off" />
+		<input type="button" id="reset" value="Clear" />
+		<img id="spinner" src="images/spinner.gif" alt="Loading..." />
+		<div id="sources"></div>
+	</form>
+	
+	<ul id="breadcrumb"></ul>
+	
+	<div id="results">
+		<div id="resultsHeader">
+			<h3><span>0</span> images found for the term <em></em></h3>
+			<hr />
+		</div>
+		
+		<div id="target"></div>
+	
+		<div id="suggestions">
+			<h2>Suggestions</h2>
+			<ul></ul>
+		</div>
+	</div>
+
+</div>
+
+<div id="footer">by <a href="http://erichynds.com">eric hynds</a>, 2010</div>
+<div id="modal"></div>
+<img id="modal-spinner" src="images/spinner-bar.gif" alt="Loading..." />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/vendor/jquery.pubsub.js"></script>
+<script type="text/javascript" src="scripts/vendor/jquery.tmpl.js"></script>
+<script type="text/javascript" src="scripts/require.js" data-main="app"></script>
+
+</body>
+</html>
