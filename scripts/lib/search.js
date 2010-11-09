@@ -80,7 +80,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 					
 				// if not in cache, do yql
 				} else {
-					var query = self._buildQuery( source, encodeURIComponent(term) );
+					var query = self._buildQuery( source, term );
 					
 					// o hai, spinner
 					spinner.show();
