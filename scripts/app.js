@@ -89,9 +89,7 @@ require(["lib/core", "lib/apis", "lib/search", "lib/suggest", "lib/breadcrumb", 
 	// change hash on keyup
 	core.keyword
 		.bind("keyup", core.throttle(function( event ){
-			if( event.which !== 13 ){
-				window.location.hash = encodeURIComponent( this.value );
-			}
+			window.location.hash = encodeURIComponent( this.value );
 		}, 300));
 	
 	// reset button
