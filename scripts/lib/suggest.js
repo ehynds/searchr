@@ -4,8 +4,9 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 	
 	// compile templates
 	$("#tmplNoResults").template("tmplNoResults");
-	$("#tmplLoadingSuggestions").template("tmplLoadingSuggestions");
 	$("#tmplSuggestion").template("tmplSuggestion");
+	$("#tmplSuggestionLoading").template("tmplSuggestionLoading");
+	$("#tmplSuggestionError").template("tmplSuggestionError");
 	
 	// listen for a search start event to kick this thing off
 	$.subscribe("/form/submit", function( term ){
@@ -24,7 +25,7 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 			this.term = term;
 			
 			// insert loading message
-			target.html( $.tmpl("tmplLoadingSuggestions") );
+			target.html( $.tmpl("tmplSuggestionLoading") );
 			
 			// found in cache?
 			if( $.isArray(cacheData) ){
@@ -33,29 +34,45 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 			} else {
 				xhr && xhr.readyState < 4 && xhr.abort();
 				
-				xhr = core.YQL({ q:this._buildQuery() }, function( response ){
-					if( !response ){ return; }
-					var results = '';
-					
-					// were any results found?
-					if( parseInt(response.query.count, 10) > 0 ){
-						results = response.query.results.Result;
-						self._results( results );
+				xhr = core.YQL(
+					{ q:this._buildQuery() },
+					function( response ){
 						
-					// no suggestions :(
-					} else {
-						self._noResults();
+						if( !response ){
+							self._onError();
+							return;
+						}
+						
+						var results = '';
+						
+						// were any results found?
+						if( parseInt(response.query.count, 10) > 0 ){
+							results = response.query.results.Result;
+							self._results( results );
+							
+						// no suggestions :(
+						} else {
+							self._noResults();
+						}
+						
+						// store in cache
+						cache.store( term, "suggest", results );
+					},
+					function(){
+						self._onError();
 					}
-					
-					// store in cache
-					cache.store( term, "suggest", results );
-				});
+				);
 			}
 		},
 		reset: function(){
 			target
 				.html( $.tmpl(core.tmplEnterKeyword) )
 				.addClass("no-suggestions");
+		},
+		_onError: function(){
+			target.html(
+				$.tmpl("tmplSuggestionError")
+			);
 		},
 		_results: function( results ){
 			var term = this.term;

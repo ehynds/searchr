@@ -85,26 +85,40 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 					// o hai, spinner
 					spinner.show();
 					
-					xhrs.push(core.YQL({ q:query }, function( response ){
-						if( !response ){ return; }
-						var results = [], count, totalResults;
-
-						// some apis (like flickr) return 1 as a count even though 0
-						// really came back.  adjust count with the offset
-						count = parseInt(response.query.count, 10) + source.responseCountOffset( response );
-						totalResults = self.totalResults += count;
-						
-						// process results as long as something came back
-						if( count > 0 ){
-							results = source.process( response );
-						}
-						
-						// store in cache
-						cache.store( term, name, results );
-						
-						self.results( results );
-						self._onComplete( term );
-					}));
+					xhrs.push(
+						core.YQL(
+							{ q:query },
+							function( response ){
+								if( !response ){
+									self._onError();
+									return;
+								}
+								
+								var results = [], count, totalResults;
+								
+								// some apis (like flickr) return 1 as a count even though 0
+								// really came back.  adjust count with the offset
+								count = parseInt(response.query.count, 10) + source.responseCountOffset( response );
+								totalResults = self.totalResults += count;
+								
+								// process results as long as something came back
+								if( count > 0 ){
+									results = source.process( response );
+								}
+								
+								// store in cache
+								cache.store( term, name, results );
+								
+								self.results( results );
+							},
+							function(){
+								self._onError();
+							},
+							function(){
+								self._onComplete( term );
+							}
+						)
+					);
 				} // end if in cache
 			});
 		},
@@ -132,6 +146,10 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			// run the search if a source was toggled after init
 			// TODO: cache the keyword so it doesn't need to be referred to each time
 			!init && this.start();
+		},
+		_onError: function(){
+			// TODO: some kind of error handling.  Right now if the requests fail
+			// it'll act as if 0 results came back, which is probably fine for now.
 		},
 		_onComplete: function( term ){
 			// once ALL are done

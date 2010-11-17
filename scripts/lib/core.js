@@ -17,8 +17,15 @@ define({
 	},
 	
 	// normalize AJAX calls to YQL
-	YQL: function( params, callback ){
+	YQL: function( params, success, error, complete ){
 		params.env = "store://datatables.org/alltableswithkeys";
-		return $.getJSON('http://query.yahooapis.com/v1/public/yql?format=json&callback=', params, callback);
+		
+		return $.ajax({
+			url: 'http://query.yahooapis.com/v1/public/yql?format=json&callback=',
+			data: params,
+			success: success,
+			error: error,
+			complete: complete || $.noop
+		});
 	}
 });
