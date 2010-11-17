@@ -1,18 +1,19 @@
 define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 	var xhrs = [],
 		sources = apis.get(),
-		tmplResults = $("#tmplResults"),
-		tmplNoSources = $("#tmplNoSources"),
 		container = $("#results"),
 		target = $("#target"),
 		header = $("#resultsHeader"),
-		phNumResults = header.find("span"),
+		phNumResults = header.find("span"), // "ph" stands for "place holder"
 		phTerm = header.find("em"),
 		spinner = $("#spinner"),
 		enabledSources = [];
 	
-	// setup listeners to dispatch calls to the search object.
+	// compile templates
+	$("#tmplResults").template("tmplResults");
+	$("#tmplNoSources").template("tmplNoSources");
 	
+	// setup listeners to dispatch calls to the search object.
 	$.subscribe("/form/submit", function( term ){
 		search.start( term );
 	});
@@ -26,7 +27,6 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 	});
 	
 	// search object
-	
 	var search = {
 		totalResults: 0,
 		counter: 0,
@@ -38,7 +38,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			
 			// short circut if no sources
 			if( !enabledSources.length ){
-				target.html( tmplNoSources.tmpl() );
+				target.html( $.tmpl("tmplNoSources") );
 				phNumResults.text(0);
 				return;
 			}
@@ -109,7 +109,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			});
 		},
 		results: function( results ){
-			tmplResults.tmpl( results ).appendTo( target );
+			$.tmpl("tmplResults", results ).appendTo( target );
 		},
 		reset: function(){
 			this._killXHRs();
