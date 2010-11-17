@@ -23,6 +23,11 @@
 		<p>Enter a keyword!</p>
 	</script>
 	
+	<script id="tmplLoadingSuggestions" type="text/x-jquery-tmpl">
+		<p><img src="images/spinner.gif" alt="Loading..." /></p>
+		<p>Loading suggestions</p>
+	</script>
+
 	<script id="tmplBreadcrumb" type="text/x-jquery-tmpl">
 		<li><a href="#${term}" title="${term}">${term}</a></li>
 	</script>
@@ -81,7 +86,7 @@
 <div id="modal"></div>
 <img id="modal-spinner" src="images/spinner-bar.gif" alt="Loading..." />
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/vendor/jquery.pubsub.js"></script>
 <script type="text/javascript" src="scripts/vendor/jquery.tmpl.js"></script>
 <script type="text/javascript" src="scripts/require.js" data-main="app"></script>

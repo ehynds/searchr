@@ -1,9 +1,11 @@
 define(["lib/core", "lib/cache"], function( core, cache ){
-		
-	var tmplSuggestion = $("#tmplSuggestion"),
-		tmplNoResults = $("#tmplNoResults"),
-		target = $("#suggestions ul"),
-		xhr;
+	
+	var target = $("#suggestions ul"), xhr;
+	
+	// compile templates
+	$("#tmplNoResults").template("tmplNoResults");
+	$("#tmplLoadingSuggestions").template("tmplLoadingSuggestions");
+	$("#tmplSuggestion").template("tmplSuggestion");
 	
 	// listen for a search start event to kick this thing off
 	$.subscribe("/form/submit", function( term ){
@@ -20,6 +22,9 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 		start: function( term ){
 			var self = this, cacheData = cache.get( term, "suggest" );
 			this.term = term;
+			
+			// insert loading message
+			target.html( $.tmpl("tmplLoadingSuggestions") );
 			
 			// found in cache?
 			if( $.isArray(cacheData) ){
@@ -66,7 +71,7 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 					
 					// render the template, and include a helper function to highlight the
 					// search term within each suggestion.
-					return tmplSuggestion.tmpl( objs, {
+					return $.tmpl("tmplSuggestion", objs, {
 						highlight:function( val ){
 							return val.replace(
 								new RegExp(term, 'g'), 
@@ -77,9 +82,9 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 				});
 		},
 		_noResults: function(){
-			target
-				.html( tmplNoResults.tmpl({ term:this.term }) )
-				.addClass("no-suggestions");
+			target.html(
+				$.tmpl("tmplNoResults", { term:this.term })
+			).addClass("no-suggestions");
 		},
 		_buildQuery: function(){
 			return 'select * from search.suggest(0) where query = "' + this.term + '"';

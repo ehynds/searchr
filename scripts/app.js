@@ -5,7 +5,7 @@
 require(["lib/core", "lib/apis", "lib/search", "lib/suggest", "lib/breadcrumb", "lib/modal"], function(core, apis, search){
 	
 	// register the yahoo api
-	apis.register("yahoo", {
+	apis.register('yahoo', {
 		select: ['thumbnail_url', 'url', 'title'],
 		from: 'search.images',
 		where: 'query',
@@ -21,7 +21,7 @@ require(["lib/core", "lib/apis", "lib/search", "lib/suggest", "lib/breadcrumb", 
 	});
 
 	// register flickr's api
-	apis.register("flickr", {
+	apis.register('flickr', {
 		select: ['id', 'title', 'farm', 'server', 'secret'],
 		from: 'flickr.photos.search',
 		where: 'text',
@@ -41,15 +41,17 @@ require(["lib/core", "lib/apis", "lib/search", "lib/suggest", "lib/breadcrumb", 
 			
 			return ret;
 		},
+		
+		// flickr returns 1 when 0 is found
 		responseCountOffset: function( response ){
 			return +response.query.count > 0 && !$.isArray(response.query.results.photo) && !response.query.results.photo.url
 				? -1
-				: -0;
+				: 0;
 		}
 	});
 
 	// register bing's api
-	apis.register("bing", {
+	apis.register('bing', {
 		select: ['*'],
 		from: 'microsoft.bing.image',
 		where: 'query',
