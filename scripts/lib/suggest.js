@@ -54,7 +54,7 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 		},
 		reset: function(){
 			target
-				.html( core.tmplEnterKeyword.tmpl() )
+				.html( $.tmpl(core.tmplEnterKeyword) )
 				.addClass("no-suggestions");
 		},
 		_results: function( results ){

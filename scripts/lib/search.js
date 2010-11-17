@@ -115,7 +115,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			this._killXHRs();
 			core.keyword.val('');
 			window.location.hash = '';
-			target.html( core.tmplEnterKeyword.tmpl() );
+			target.html( $.tmpl(core.tmplEnterKeyword) );
 			container.animate({ minHeight: "100px" }, 'fast');
 			header.slideUp("fast");
 			spinner.hide();

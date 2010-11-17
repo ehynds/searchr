@@ -1,7 +1,7 @@
 define({
 	form: $("form"),
 	keyword: $("#keyword"),
-	tmplEnterKeyword: $("#tmplEnterKeyword"),
+	tmplEnterKeyword: $("#tmplEnterKeyword").template(),
 	
 	// throttles ajax requests.  thx to remy sharp <3
 	throttle: function( fn, delay ){
