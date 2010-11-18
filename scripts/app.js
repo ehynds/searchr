@@ -1,8 +1,17 @@
 // this file acts as a controller.  it loads in all dependencies
 // and decides when to publish events.  this is the only file that
 // publishes; all other modules listen.
-
-require(["lib/core", "lib/apis", "lib/search", "lib/suggest", "lib/breadcrumb", "lib/modal"], function(core, apis, search){
+require(
+	[
+		"scripts/vendor/jquery.pubsub.js",
+		"scripts/vendor/jquery.tmpl.js",
+		"lib/core",
+		"lib/apis",
+		"lib/search",
+		"lib/suggest",
+		"lib/breadcrumb",
+		"lib/modal"
+	], function(p, t, core, apis, search){
 	
 	// register the yahoo api
 	apis.register('yahoo', {
