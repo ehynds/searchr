@@ -36,16 +36,21 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			// grab term out of the keyword field if it wasn't passed in (toggling a source)
 			term = term || core.keyword.val();
 			
+			// short circuit if no term
+			if( !$.trim(term).length ){
+				this.reset();
+				return;
+			}
+			
+			// prepare container as long as there's a term.  this ensures
+			// that the height will always be tall enough for the suggestion
+			// sidebar, even if no results are found.
+			container.animate({ minHeight: "250px" }, "fast");
+			
 			// short circut if no sources
 			if( !enabledSources.length ){
 				target.html( $.tmpl("tmplNoSources") );
 				phNumResults.text(0);
-				return;
-			}
-			
-			// reset & short circuit if no term
-			if( !$.trim(term).length ){
-				this.reset();
 				return;
 			}
 			
@@ -55,7 +60,6 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			
 			// prepare target
 			target.empty();
-			container.animate({ minHeight: "250px" }, 'fast');
 			
 			// remember this search
 			window.location.hash = term;
@@ -127,10 +131,10 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 		},
 		reset: function(){
 			this._killXHRs();
-			core.keyword.val('');
-			window.location.hash = '';
+			core.keyword.val("");
+			window.location.hash = "";
 			target.html( $.tmpl(core.tmplEnterKeyword) );
-			container.animate({ minHeight: "100px" }, 'fast');
+			container.animate({ minHeight: "100px" }, "fast");
 			header.slideUp("fast");
 			spinner.hide();
 		},

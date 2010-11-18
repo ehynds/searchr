@@ -104,7 +104,7 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 			).addClass("no-suggestions");
 		},
 		_buildQuery: function(){
-			return 'select * from search.suggest(0) where query = "' + this.term + '"';
+			return 'select * from search.suggest where query = "' + this.term + '"';
 		}
 	};
 });
