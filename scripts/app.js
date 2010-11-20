@@ -81,6 +81,9 @@ require(
 		}
 	});
 	
+	// set default animation speed
+	$.fx.speeds._default = 200;
+	
 	var tmplSources = $("#tmplSources").template(),
 		sources = $("#sources").detach(),
 		form = core.form,
@@ -92,7 +95,7 @@ require(
 	});
 	
 	// inject back into DOM
-	sources.appendTo( form ).slideDown('fast');
+	sources.appendTo( form ).slideDown();
 	
 	// when a source is changed...
 	form

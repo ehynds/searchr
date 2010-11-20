@@ -45,7 +45,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			// prepare container as long as there's a term.  this ensures
 			// that the height will always be tall enough for the suggestion
 			// sidebar, even if no results are found.
-			container.animate({ minHeight: "250px" }, "fast");
+			container.animate({ minHeight: "250px" });
 			
 			// short circut if no sources
 			if( !enabledSources.length ){
@@ -134,8 +134,8 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			core.keyword.val("");
 			window.location.hash = "";
 			target.html( $.tmpl(core.tmplEnterKeyword) );
-			container.animate({ minHeight: "100px" }, "fast");
-			header.slideUp("fast");
+			container.animate({ minHeight: "100px" });
+			header.slideUp();
 			spinner.hide();
 		},
 		toggleSources: function( source, checked, init ){
@@ -162,7 +162,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			}
 			
 			// show header
-			header.is(":hidden") && header.slideDown("fast");
+			header.is(":hidden") && header.slideDown();
 			
 			// update placeholders
 			phTerm.text( term );

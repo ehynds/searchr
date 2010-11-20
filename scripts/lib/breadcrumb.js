@@ -21,7 +21,7 @@ define(function(){
 			
 			// show target?
 			if( target.is(":hidden") ){
-				target.slideDown("fast");
+				target.slideDown();
 			}
 			
 			var index = $.inArray(term, history);
@@ -39,7 +39,7 @@ define(function(){
 			history.push( term );
 		},
 		reset: function(){
-			target.slideUp("fast").empty();
+			target.slideUp().empty();
 			history = [];
 		},
 		_remove: function( index ){
