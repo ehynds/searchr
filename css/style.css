@@ -22,7 +22,7 @@ header { display:block }
 #spinner { display:none }
 
 /* source checkboxes */
-#sources { margin-top:5px; text-indent:58px; }
+#sources { margin-top:5px; text-indent:58px; display:none }
 #sources label { margin-right:10px }
 
 /* footer */

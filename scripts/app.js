@@ -81,16 +81,23 @@ require(
 		}
 	});
 	
+	var tmplSources = $("#tmplSources").template(),
+		sources = $("#sources").detach(),
+		form = core.form,
+		keyword = core.keyword;
+	
 	// render these APIs into the template
-	var tmplSources = $("#tmplSources");
 	$.each(apis.get(), function( name ){
-		tmplSources.tmpl({ name:name }).appendTo("#sources");
+		$.tmpl(tmplSources, { name:name }).appendTo( sources );
 	});
 	
+	// inject back into DOM
+	sources.appendTo( form ).slideDown('fast');
+	
 	// when a source is changed...
-	core.form
+	form
 		.bind("submit", false)
-		.find(":checkbox[name=source]")
+		.find(":checkbox[name='source']")
 		.bind("click", function( e, init ){
 			$.publish("/form/toggleSource", [ this.id, this.checked, init ]);
 		})
@@ -99,8 +106,8 @@ require(
 		});
 	
 	// change hash on keyup
-	core.keyword
-		.bind("keyup", core.throttle(function( event ){
+	keyword
+		.bind("keyup", core.throttle(function(){
 			window.location.hash = encodeURIComponent( this.value );
 		}, 300));
 	
@@ -114,7 +121,7 @@ require(
 	$(window)
 		.bind("hashchange", function(){
 			var hash = decodeURIComponent(window.location.hash.replace('#', ''));
-			core.keyword.val( hash );
+			keyword.val( hash );
 			$.publish("/form/submit", [ hash ]);
 		})
 		.trigger("hashchange");
