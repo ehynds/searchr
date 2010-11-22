@@ -112,7 +112,12 @@ require(
 	keyword
 		.bind("keyup", core.throttle(function(){
 			window.location.hash = encodeURIComponent( this.value );
-		}, 300));
+		}, 300))
+		.bind("click", function(){
+			if( !this.value.length ){
+				$.publish("/form/reset");
+			}
+		});
 	
 	// reset button
 	$("#reset")
