@@ -1,17 +1,22 @@
 // this file acts as a controller.  it loads in all dependencies
 // and decides when to publish events.  this is the only file that
 // publishes; all other modules listen.
-require(
-	[
-		"scripts/vendor/jquery.pubsub.js",
-		"scripts/vendor/jquery.tmpl.js",
+
+// get 3rd party libs before searchr modules are loaded
+require([
+	"scripts/vendor/jquery.pubsub.js",
+	"scripts/vendor/jquery.tmpl.js"
+]);
+
+// get searchr modules
+require([
 		"lib/core",
 		"lib/apis",
 		"lib/search",
 		"lib/suggest",
 		"lib/breadcrumb",
 		"lib/modal"
-	], function(p, t, core, apis, search){
+	], function(core, apis, search){
 	
 	// register the yahoo api
 	apis.register('yahoo', {
@@ -84,53 +89,56 @@ require(
 	// set default animation speed
 	$.fx.speeds._default = 200;
 	
-	var tmplSources = $("#tmplSources").template(),
-		sources = $("#sources").detach(),
-		form = core.form,
-		keyword = core.keyword;
-	
-	// render these APIs into the template
-	$.each(apis.get(), function( name ){
-		$.tmpl(tmplSources, { name:name }).appendTo( sources );
-	});
-	
-	// inject back into DOM
-	sources.appendTo( form ).slideDown();
-	
-	// when a source is changed...
-	form
-		.bind("submit", false)
-		.find(":checkbox[name='source']")
-		.bind("click", function( e, init ){
-			$.publish("/form/toggleSource", [ this.id, this.checked, init ]);
-		})
-		.each(function(){
- 			$(this).triggerHandler("click", true); // run em on page load
+	require.ready(function(){
+		
+		var tmplSources = $("#tmplSources").template(),
+			sources = $("#sources").detach(),
+			form = core.form,
+			keyword = core.keyword;
+		
+		// render these APIs into the template
+		$.each(apis.get(), function( name ){
+			$.tmpl(tmplSources, { name:name }).appendTo( sources );
 		});
-	
-	// change hash on keyup
-	keyword
-		.bind("keyup", core.throttle(function(){
-			window.location.hash = encodeURIComponent( this.value );
-		}, 300))
-		.bind("click", function(){
-			if( !this.value.length ){
+		
+		// inject back into DOM
+		sources.appendTo( form ).slideDown();
+		
+		// when a source is changed...
+		form
+			.bind("submit", false)
+			.find(":checkbox[name='source']")
+			.bind("click", function( e, init ){
+				$.publish("/form/toggleSource", [ this.id, this.checked, init ]);
+			})
+			.each(function(){
+				$(this).triggerHandler("click", true); // run em on page load
+			});
+		
+		// change hash on keyup
+		keyword
+			.bind("keyup", core.throttle(function(){
+				window.location.hash = encodeURIComponent( this.value );
+			}, 300))
+			.bind("click", function(){
+				if( !this.value.length ){
+					$.publish("/form/reset");
+				}
+			});
+		
+		// reset button
+		$("#reset")
+			.bind("click", function(){
 				$.publish("/form/reset");
-			}
-		});
-	
-	// reset button
-	$("#reset")
-		.bind("click", function(){
-			$.publish("/form/reset");
-		});
-	
-	// listen for a hash change to publish form submission, and trigger event on page load
-	$(window)
-		.bind("hashchange", function(){
-			var hash = decodeURIComponent(window.location.hash.replace('#', ''));
-			keyword.val( hash );
-			$.publish("/form/submit", [ hash ]);
-		})
-		.trigger("hashchange");
+			});
+		
+		// listen for a hash change to publish form submission, and trigger event on page load
+		$(window)
+			.bind("hashchange", function(){
+				var hash = decodeURIComponent(window.location.hash.replace('#', ''));
+				keyword.val( hash );
+				$.publish("/form/submit", [ hash ]);
+			})
+			.trigger("hashchange");
+	});
 });
