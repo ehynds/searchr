@@ -102,12 +102,14 @@ require([
 		});
 		
 		// inject back into DOM
-		sources.appendTo( form ).slideDown();
+		sources
+			.appendTo( form )
+			.slideDown();
 		
 		// when a source is changed...
 		form
 			.bind("submit", false)
-			.find(":checkbox[name='source']")
+			.find("input[type='checkbox'][name='source']")
 			.bind("click", function( e, init ){
 				$.publish("/form/toggleSource", [ this.id, this.checked, init ]);
 			})
