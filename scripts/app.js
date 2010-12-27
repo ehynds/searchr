@@ -28,9 +28,9 @@ require([
 			
 			// if 2+ results come back it's an array, otherwise an object.
 			// normalize it into an array
-			return +response.query.count === 1
-				? [ results ]
-				: results;
+			return +response.query.count === 1 ?
+				[ results ] :
+				results;
 		}
 	});
 
@@ -59,9 +59,9 @@ require([
 		// flickr returns a record count of 1 even when 0 results are found.
 		// it also returns 1 when 1 is found, so this function adjusts this.
 		responseCountOffset: function( response ){
-			return +response.query.count > 0 && !$.isArray(response.query.results.photo) && !response.query.results.photo.url
-				? -1
-				: 0;
+			return +response.query.count > 0 && !$.isArray(response.query.results.photo) && !response.query.results.photo.url ?
+				-1 :
+				0;
 		}
 	});
 
