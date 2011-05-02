@@ -104,7 +104,7 @@ define(["lib/core", "lib/cache"], function( core, cache ){
 			).addClass("no-suggestions");
 		},
 		_buildQuery: function(){
-			return 'select * from search.suggest where query = "' + this.term + '"';
+			return 'select * from search.spelling where query = "' + this.term + '" and appid = "UsC1thvV34GAi_Qe2r4ooePhutfIibRzZ6We9MFvbzNknJ1td.qS2Ayd3NNdf9B3HbF4mXALL6Unlqy_6LItTHW2fZ8qnIw-"';
 		}
 	};
 });
