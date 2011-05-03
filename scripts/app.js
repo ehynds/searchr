@@ -19,6 +19,7 @@ define([
 			select: ['thumbnail_url', 'url', 'title'],
 			from: 'search.images',
 			where: 'query',
+			and: { appid: core.appid },
 			process: function( response ){
 				var results = response.query.results.result;
 				

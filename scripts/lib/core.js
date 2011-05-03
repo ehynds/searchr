@@ -2,6 +2,7 @@ define({
 	form: $("form"),
 	keyword: $("#keyword"),
 	tmplEnterKeyword: $("#tmplEnterKeyword").template(),
+	appid: 'UsC1thvV34GAi_Qe2r4ooePhutfIibRzZ6We9MFvbzNknJ1td.qS2Ayd3NNdf9B3HbF4mXALL6Unlqy_6LItTHW2fZ8qnIw-',
 	
 	// throttles ajax requests.  thx to remy sharp <3
 	throttle: function( fn, delay ){
@@ -19,7 +20,7 @@ define({
 	// normalize AJAX calls to YQL
 	YQL: function( params, success, error, complete ){
 		params.env = "store://datatables.org/alltableswithkeys";
-		
+
 		return $.ajax({
 			url: 'http://query.yahooapis.com/v1/public/yql?format=json&callback=',
 			data: params,

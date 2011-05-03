@@ -175,6 +175,7 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			});
 		},
 		_buildQuery: function( source, term ){
+			console.log( source )
 			var ret = '';
 			ret += 'select ';
 			ret += source.select.join(',');
@@ -186,7 +187,8 @@ define(["lib/core", "lib/cache", "lib/apis"], function( core, cache, apis ){
 			
 			if( source.hasOwnProperty("and") ){
 				$.each(source.and, function( key ){
-					ret += ' and ' + key + ' = ' + source.and[key];
+					console.log(key)
+					ret += ' and ' + key + ' = "' + source.and[key] + '"';
 				});
 			}
 			
